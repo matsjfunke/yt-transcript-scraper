@@ -6,9 +6,8 @@ import re
 
 from youtube_transcript_api import YouTubeTranscriptApi
 
-
 def main(url):
-    pattern = r"v=([^&]+)"
+    pattern = r"(?:v=|\/)([0-9A-Za-z_-]{11}).*"
     match = re.search(pattern, url)
     if match:
         video_id = match.group(1)
