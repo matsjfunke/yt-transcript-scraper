@@ -1,0 +1,275 @@
+Wenn Sie sich mein vorheriges Video angesehen haben,
+verstehen Sie wahrscheinlich, wie der Computer
+Bilder klassifizieren kann. Dieses Video
+soll Ihnen ein tiefgreifendes
+Verständnis dafür vermitteln, wie die
+Vorwärtsausbreitung in einem Faltungs-Neuronalen
+Netzwerk funktioniert, indem es
+die dahinter stehende Mathematik visualisiert und beschreibt
+Die Haube
+[Musik]
+Bevor wir beginnen, werfen wir einen kurzen
+Blick auf das Modell, in dem wir
+die verschiedenen Prozesse durchgehen. Sie können
+diesen Teil gerne überspringen.
+Das Modell ist vorab trainiert und hat eine
+Genauigkeit von 95,4 Prozent, die es in
+einem Eingabebild aufnimmt  mit den Dimensionen 28 x
+28 x 1. Zuerst führen wir eine
+Faltung mit zwei Filtern durch, die eine
+Filtergröße von Pi mal Pi mal eins haben, und verwenden
+eine Aktivierungsfunktion namens „Value“. Als
+nächstes führen wir Max Pooling mit
+der Pull-Größe 2x2 und durch  Der Schritt von
+2. Dies ist unsere erste Ebene, dann fahren wir mit der
+Durchführung unserer zweiten Faltung fort.
+Dieses Mal werden wir schlechte Filter mit
+den Dimensionen drei mal drei mal zwei verwenden. Die
+Aktivierungsfunktion ist Sigmoid. Danach führen
+wir Max-Pooling durch, wie wir es
+zuvor getan haben  die Pull-Größe von 2x2
+und das Sprite von zwei,
+dann glätten wir die Matrizen. Dies ist
+unsere zweite Ebene.
+Schließlich haben wir eine vollständig verbundene Ebene,
+die die Vorhersagen ausgibt. Jetzt können wir
+das Modell in Aktion sehen. Wir beginnen mit
+der Eingabeebene, die eine 28 ist  28 mal
+eindimensionales Bild Diese Art von
+Bildern wird auch als Graustufenbilder bezeichnet,
+da sie keine Farbkanäle
+wie RGB-Bilder haben.
+Kein Problem, obwohl der Prozess derselbe ist,
+wenn wir das Bild auf Pixelebene zerlegen
+Wir sehen, dass jedes Pixel
+nur eine Zahl im Bereich von 0 bis 255 ist,
+wobei 0 für Pechschwarz und 255 für
+Weiß steht.
+Das Bild wird in die erste
+Faltungsschicht eingespeist, die aus
+zwei fünf mal fünf mal eindimensionalen
+Filtern besteht, die oft als Filter bezeichnet werden
+Da jeder Filter im Kernel auch
+seinen eigenen Bias-Term hat,
+verwenden wir den Schritt von einem und eine
+Aktivierungsfunktion namens Relu.
+Die Aktivierungen vom ersten Filter
+werden auf eine Aktivierungsebene abgebildet.
+Schauen wir uns nun genauer an, was bei
+jedem Filter tatsächlich vor sich geht  Schritt der
+Faltung,
+um den Aktivierungswert zu erhalten,
+der das Pixel ist, das Sie auf der
+Aktivierungsebene sehen. Wir verwenden diese Formel.
+Jetzt
+brechen wir sie auf,
+da wir die Schichten verwenden. Wir schieben den
+Kernel bei jeder Iteration einen Schritt nach rechts,
+bis wir  Wenn wir das Ende erreichen,
+schieben wir es sowieso einen Schritt nach unten und
+ganz zurück zum Anfang.
+Wenn wir uns den ersten Term
+der Formel ansehen, bedeutet dies im Grunde, dass wir
+die Gewichte aus dem Kernel
+mit den überlappenden Werten aus der
+Eingabe multiplizieren
+sollen  Wenn wir eine Matrix mit den gleichen Dimensionen zurückgeben,
+summieren wir alle Werte in dieser
+Matrix und fügen den Bias-Term hinzu, um
+z183 zu erhalten.
+Beachten Sie, dass dies
+z183 ist, da es sich um die
+183. Iteration handelt, was im Grunde bedeutet,
+dass wir den Kernel 182 geteilt haben
+Um den Aktivierungswert zu erhalten,
+übergeben wir vorher z183 an die Entlastungsfunktion. Der
+Wert steht für gleichgerichtete lineare Einheit
+und dies ist die Funktion, die
+wir visualisieren können, um ein besseres
+Verständnis zu erhalten.
+Einfach für Null oder jeden negativen Wert gibt der
+Wert für jeden 0 zurück  Ein positiver
+Wert gibt den eingegebenen Wert zurück,
+wenn wir zu unserer Aktivierung zurückkehren, die
+negativ
+41,1665 ist. Wir bemerken, dass Prelude
+Null ausgibt, da dies optisch gesehen eine negative Zahl ist,
+ein schwarzes Pixel.
+Dann schieben wir den Kernel einen Schritt nach
+rechts und wiederholen den Vorgang  Wenn Sie
+dies tun, erhalten Sie durch ein ganzes Bild
+die endgültige Aktivierungsebene des
+ersten Filters. Anschließend
+machen Sie genau das Gleiche für
+den zweiten Filter und gehen zur
+Pooling-Ebene über, wo
+Sie sehen können, dass die erste Faltung
+zwei Bilder oder Matrizen ausgegeben hat  Diese
+werden Kanäle genannt. Wir führen nun
+Max-Pooling mit einer Pull-Größe von 2x2 durch und
+der Schritt von zwei ist die Poolgröße
+genau gleich der Filtergröße. Sie
+erhalten eine Matrix mit den Abmessungen
+2x2. Wenn Sie Max-Pooling auf dem ersten
+Kanal durchführen, wird das Ergebnis sein  Lassen Sie uns nun
+tiefer in den Abkühlungsprozess eintauchen, um zu
+sehen, was tatsächlich vor sich geht. Wir
+beginnen damit, den Filter in der oberen
+linken Ecke zu platzieren, genau wie wir es mit der Faltungsschicht getan haben,
+aber anstatt
+umfangreiche Berechnungen durchzuführen, extrahieren wir einfach
+den Maximalwert und  Schieben Sie den Kernel
+zwei Schritte nach rechts, da wir
+auch den Strider verwenden. Dann wiederholen wir den
+Vorgang und extrahieren den Maximalwert, den Sie
+vielleicht von Mint-Pooling und
+Average Pulling gehört haben. Im Grunde genommen werden Sie für Mean
+Pulling, wie der Name schon sagt,
+den Minimalwert wählen  Für das
+durchschnittliche Pooling wählen Sie den
+Durchschnitt der Matrix, in diesem Fall den
+Durchschnitt der vier Werte, über die der Filter
+gleitet. Zurück zu unserem Beispiel
+fahren wir mit dem gleichen Prozess fort,
+bis wir den gesamten Kanal effektiv abgedeckt haben,
+indem wir eine Filtergröße von wählen
+2x2 und den Schritt von 2 haben wir
+die Abmessungen von 24 x 24 x 2 auf
+12 x 12 x 2 verkleinert. Im Grunde ist die Hälfte der
+Abmessungen jedes der
+nächsten Kanäle unsere zweite
+Faltungsschicht. Hier werden wir vier Filter mit
+dem Stratus 1 verwenden  und eine Aktivierungsfunktion
+namens Sigmoid a, wie Sie wahrscheinlich
+inzwischen bemerkt haben. Diese Filter sind gestapelt.
+Wenn Sie sie trennen, werden Sie sehen, dass wir
+eigentlich acht Filter haben, also
+sind es vier Filter mit den
+Abmessungen drei mal drei  Zwei, da
+wir zwei Kanäle aus der vorherigen
+Ausgabe haben, die die Eingabe dieser Ebene ist,
+haben wir zwei Kanäle für jeden Filter, mit
+anderen Worten: vier Filter mit zwei
+Kanälen. Es gibt auch einen Bias-Term für
+jeden dieser Filter, der
+die Faltungsausgänge und die
+Aktivierung ähnlich dem ausführt  erste
+Faltung, aber da wir mehrere
+Kanäle haben, wird die Berechnung
+etwas anders. Schauen wir uns das
+zunächst einmal an. Wir platzieren jeden Kernel über
+seinem jeweiligen Kanal in der oberen
+linken Ecke, genau wie wir es zuvor getan haben, und
+schreiben die Formel zur Berechnung
+der Aktivierung auf,
+wie Sie sehen können  Die Formel
+unterscheidet sich geringfügig, ist aber immer noch weitgehend dieselbe.
+Wir beginnen mit dem ersten Term, der
+uns im Grunde sagt, dass wir den
+Kernel mit den Werten aus der
+Eingabeschicht multiplizieren sollen. Dies gilt für beide Kernel.
+Der nächste Schritt sagt uns, dass wir alle
+Werte von beiden addieren sollen  Wenn Sie jetzt Matrizen zusammenfügen,
+können Sie dies auf verschiedene Arten tun, z.
+B. indem Sie jeden Term einzeln addieren.
+In diesem Beispiel addieren wir jedoch
+zuerst die Matrizen und summieren dann
+alle Werte. Die Ergebnisse wären dann in beiden
+Richtungen gleich gewesen
+Um Z1 zu erhalten, müssen wir den Bias-Term hinzufügen.
+Anschließend berechnen wir die
+Aktivierung, die uns sagt, dass wir das
+Sigmoid von Z1 verwenden sollen, das in unserem Fall
+minus 7,36 beträgt. Wenn Sie
+mit der Sigmoidfunktion nicht vertraut sind, werfen wir einen
+kurzen Blick darauf  Wenn Sie sich
+die Funktion oder das Diagramm ansehen, stellen Sie möglicherweise
+fest, dass das Sigmoid einen Wert
+im Bereich zwischen ungefähr 0 und
+ungefähr 1 ausgibt.
+Die Berechnung des Sigmoids für unser Z1
+ergibt ungefähr Null. Wir können sehen,
+dass dies bedeutet, wenn wir Z1 in das Diagramm eintragen  Stellen Sie sicher,
+dass die Aktivierung gleich Null ist.
+Wir zeichnen A1 auf der Aktivierungsebene auf
+, verschieben den Kernel einen Schritt nach
+rechts und wiederholen den Vorgang immer
+wieder, bis wir alles abgedeckt haben.
+Dieser Vorgang wird für jeden der
+Filter wiederholt, von denen Sie vielleicht bemerken, dass einige davon
+Die Pixel auf der Aktivierungsebene sind
+superbreit, während der Aktivierungswert
+aufgrund der Sigmoidfunktion nur zwischen 0 und 1 liegt.
+Dies dient nur visuellen Zwecken, wenn wir
+die herkömmliche Möglichkeit gewählt hätten,
+255 als Weiß und Null als
+Schwarz darzustellen, die wir nicht hätten  Ich konnte sowieso
+nichts auf den Aktivierungsebenen sehen.
+Machen wir weiter.
+Dies ist unsere letzte Zugebene, die
+genau die gleiche ist wie die vorherige.
+Wir werden eine Poolgröße von 2x2 verwenden und
+auch The Strider wird die
+Abmessungen für jede davon haben  Kanäle und
+extrahieren die am meisten aktivierten Pixel.
+Anschließend nehmen wir die vier Matrizen und glätten
+sie. Wir sind jetzt von vier
+5x5-Matrizen zu einer flachen Ebene
+mit 100 Knoten übergegangen, wobei jeder Knoten
+einem Pixel entspricht,
+um die Visualisierung zu
+vereinfachen  Im nächsten Schritt werden wir alle
+Knoten außer den ersten und letzten fünf ausblenden.
+Schließlich haben wir die Ausgabeebene, in der
+wir eine von zehn verschiedenen Vorhersagen ausgeben möchten.
+Dies ist die vollständig verbundene
+Ebene. Schauen wir uns kurz an, wie
+diese Ebenen
+in unserem funktionieren  Modell haben wir 100 Eingabeknoten und
+10 Ausgabeknoten, um den
+Erklärungsprozess zu vereinfachen. Wir werden
+alles auf drei Eingabe- und zwei
+Ausgabeknoten herunterskalieren. Die
+vollständig verbundene Schicht besteht aus
+Eingabeknoten und Ausgabeknoten, die
+mit Gewichten und Vorspannungen verbunden sind, die
+die Eingabe durch die Gewichte leiten
+und Bias ergeben zunächst eine Ausgabe.
+Normalerweise hat jeder Ausgabeknoten
+einen Bias-Term, der später
+im Prozess zum Tragen kommt.
+Dann haben wir den Eingabeknoten, der
+über einige Gewichte mit den Ausgabeknoten verbunden ist.
+Diese Gewichte sind nur
+Zahlen, die
+Sie mit der Eingabe multiplizieren  Knoten mit der
+entsprechenden Gewichtung hinzufügen und zur
+Ausgabe hinzufügen. Dies machen Sie für jeden
+Ausgabeknoten und fahren mit dem nächsten Eingabeknoten fort. Der
+Vorgang ist derselbe: Sie multiplizieren den
+Eingabeknoten mit der Gewichtung und addieren sie
+vor dem Verschieben zum entsprechenden Ausgabeknoten
+Weiter zur endgültigen Eingabe.
+Hier wird derselbe Prozess für den
+dritten Eingabeknoten angewendet, bevor schließlich
+die Bias-Terme hinzugefügt werden. Man könnte meinen, dass dies
+ein mühsames Problem für größere Modelle ist
+und dass daher die
+Matrixmultiplikation verwendet wird, um die
+Berechnungen durchzuführen, also hier ist die  Formel die
+Ausgabematrix Z, die in unserem Fall
+3,6 und 7 wäre, ist definiert als die
+Matrixmultiplikation der Eingabeknoten multipliziert mit
+den Gewichten plus den Bias-Termen.
+Jetzt könnten Sie dieser Ausgabe eine Aktivierung wie
+Wert oder Sigmoid usw. hinzufügen, aber
+das war nicht der Fall.  Dies ist in unserem Modell noch nicht geschehen, da dies
+der letzte Spieler war. Gehen wir zurück. Wenn wir
+alles, was wir gerade gesehen haben, skalieren und
+die Eingabeknoten durch die letzte vollständig
+verbundene Ebene laufen lassen, werden wir sehen, dass das Modell
+vorhersagt, dass das eingegebene Bild am
+Anfang 7 ist  . Genau das, was ich mir auch gedacht habe.
+Bitte hinterlassen Sie einen Kommentar und
+abonnieren Sie den Kanal, wenn Ihnen
+dieses Video etwas bedeutet
